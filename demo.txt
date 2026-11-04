@@ -1,0 +1,311 @@
+
+import streamlit as st
+import streamlit.components.v1 as components
+import random
+
+st.set_page_config(
+    page_title="Love Heart",
+    page_icon="❤️",
+    layout="wide"
+)
+
+# ---------------- PAGE DESIGN ----------------
+
+st.markdown("""
+<style>
+.stApp {
+    background: #050505;
+    color: white;
+}
+
+header {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+#MainMenu {
+    visibility: hidden;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+# ---------------- SESSION STATE ----------------
+
+if "unlocked" not in st.session_state:
+    st.session_state.unlocked = False
+
+
+# ---------------- NAME DIALOG BOX ----------------
+
+@st.dialog("A Little Love Surprise ❤️")
+def name_dialog():
+
+    st.markdown(
+        "<h3 style='text-align:center;color:#ff6685;'>"
+        "Enter Your Name ❤️</h3>",
+        unsafe_allow_html=True
+    )
+
+    name = st.text_input(
+        "Your Name",
+        placeholder="Enter your name..."
+    )
+
+    if st.button("Open My Surprise ❤️", use_container_width=True):
+
+        if name.strip().lower() == "zoya":
+
+            st.session_state.unlocked = True
+            st.rerun()
+
+        else:
+
+            st.warning("Tarique Only loves Zoya ❤️")
+
+
+# Show dialog when app starts
+if not st.session_state.unlocked:
+
+    name_dialog()
+
+
+# ---------------- LOVE HEART ANIMATION ----------------
+
+if st.session_state.unlocked:
+
+    st.markdown("""
+    <h2 style="
+        text-align:center;
+        color:#ff6685;
+        font-family:cursive;
+        margin-top:20px;">
+        A Special Message For Zoya ❤️
+    </h2>
+    """, unsafe_allow_html=True)
+
+    # Translations
+    love_words = [
+        "I love you Zoya",
+        "Ich liebe dich Zoya",
+        "Je t'aime Zoya",
+        "Te amo Zoya",
+        "Ti amo Zoya",
+        "Seni seviyorum Zoya",
+        "Aku cinta kamu Zoya",
+        "Eu te amo Zoya",
+        "愛してる Zoya",
+        "사랑해 Zoya",
+        "我爱你 Zoya",
+        "Я тебя люблю Zoya",
+        "Ik hou van jou Zoya",
+        "أحبك Zoya",
+        "Kocham cię Zoya"
+    ]
+
+    # Heart-shaped text rows
+    rows = [
+        (45, 45),
+        (65, 65),
+        (85, 85),
+        (100, 100),
+        (100, 100),
+        (90, 90),
+        (80, 80),
+        (68, 68),
+        (55, 55),
+        (42, 42),
+        (30, 30),
+        (18, 18)
+    ]
+
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+
+    <style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #050505;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        width: 100%;
+        min-height: 650px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .heart {
+        width: 100%;
+        max-width: 650px;
+        animation: heartbeat 1.5s infinite;
+        filter: drop-shadow(0 0 12px #ff365e);
+    }
+
+    .heart-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 7px auto;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .love {
+        color: #ff667d;
+        font-size: clamp(8px, 1.7vw, 15px);
+        font-weight: bold;
+        text-shadow: 0 0 8px #ff345d;
+        animation: glow 2s infinite alternate;
+    }
+
+    @keyframes heartbeat {
+        0% {
+            transform: scale(0.95);
+        }
+
+        50% {
+            transform: scale(1.04);
+        }
+
+        100% {
+            transform: scale(0.95);
+        }
+    }
+
+    @keyframes glow {
+        from {
+            opacity: 0.65;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .message {
+        color: #ff7891;
+        font-size: 23px;
+        font-family: cursive;
+        text-align: center;
+        margin-top: 20px;
+        animation: glow 2s infinite alternate;
+    }
+
+    .floating-heart {
+        position: fixed;
+        bottom: -30px;
+        color: #ff4569;
+        font-size: 20px;
+        animation: floatUp 7s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes floatUp {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 0;
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-750px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    </style>
+
+    </head>
+
+    <body>
+
+    <div class="container">
+
+        <div class="heart">
+    """
+
+    # Generate heart-shaped text
+    for i, widths in enumerate(rows):
+
+        width = widths[0]
+
+        html += f"""
+        <div class="heart-row" style="width:{width}%;">
+        """
+
+        for j in range(5):
+
+            word = love_words[(i * 5 + j) % len(love_words)]
+
+            html += f"""
+            <span class="love">{word}</span>
+            """
+
+        html += "</div>"
+
+    html += """
+        </div>
+
+        <div class="message">
+            I Love You Zoya ❤️
+        </div>
+
+    </div>
+
+    <script>
+
+    for(let i = 0; i < 25; i++) {
+
+        let heart = document.createElement("div");
+
+        heart.className = "floating-heart";
+        heart.innerHTML = "♥";
+
+        heart.style.left = Math.random() * 100 + "%";
+
+        heart.style.animationDelay =
+            Math.random() * 7 + "s";
+
+        heart.style.fontSize =
+            (15 + Math.random() * 25) + "px";
+
+        document.body.appendChild(heart);
+
+    }
+
+    </script>
+
+    </body>
+    </html>
+    """
+
+    components.html(
+        html,
+        height=720,
+        scrolling=False
+    )
+
+    if st.button("Close Surprise", use_container_width=True):
+
+        st.session_state.unlocked = False
+        st.rerun()
